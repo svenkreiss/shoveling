@@ -2,10 +2,10 @@ shoveling
 =========
 
 * Go backend
-* Python one of the possible frontends
-* orchestration with consul: worker discovery through "consul services"
+* Shared C library that exports the Go interface using cgo (separate repo)
+* Python module as one of the possible interfaces (separate repo)
+* orchestration with consul: worker discovery and healthcheck through "consul services"
 * configure workers with consul key/value store (e.g. max-memory)
-* "distributed namenode" using consul key/value store, or updates propagate too slow?
 * bulk data communication with ZMQ?
 
 
@@ -20,7 +20,9 @@ Use Cases
 ---------
 
 * manager for distributed shuffle operations (e.g. for distributed sort)
+    * need to be able to create a larger number of cache ids that are uniformly distributed across the cluster even though they are of size 0 when created (round robin?)
 * distributed cache
+    * compress data
 
 
 API
@@ -28,5 +30,7 @@ API
 
 * ``set(id, data)``
 * ``get(id)``
+* ``append(id, data)``
 * ``node_id(cache_id, strategy=default)`` (suggestion for best node to process this cache id)
+* ``node_ids(cache_id)`` (return the nodes where the data is)
 * ``_node_cache_score(node_id, cache_id)`` (a score of "distance" between node and data -- use consul's Network Coordinates)
