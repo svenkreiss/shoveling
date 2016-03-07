@@ -31,6 +31,7 @@ API
 * ``set(id, data)``
 * ``get(id)``
 * ``append(id, data)``
+* ``init(list_ids, strategy='uniform_nodes')`` (create cache ids uniformly distributed across the cluster where strategy can be uniform in nodes, uniform in cpu or uniform in available memory)
 * ``node_id(cache_id, strategy=default)`` (suggestion for best node to process this cache id)
 * ``node_ids(cache_id)`` (return the nodes where the data is)
 * ``_node_cache_score(node_id, cache_id)`` (a score of "distance" between node and data -- use consul's Network Coordinates)
