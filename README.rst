@@ -35,3 +35,22 @@ API
 * ``node_id(cache_id, strategy=default)`` (suggestion for best node to process this cache id)
 * ``node_ids(cache_id)`` (return the nodes where the data is)
 * ``_node_cache_score(node_id, cache_id)`` (a score of "distance" between node and data -- use consul's Network Coordinates)
+
+
+Build
+-----
+
+.. code-block:: bash
+
+    go build -o bin/interactive interactive/interactive.go
+
+Build and run a worker:
+
+.. code-block:: bash
+
+    docker build -t svenkreiss/shoveling-worker worker/
+
+    docker run --rm --name node1 -h node1 -v ${PWD}/data:/data svenkreiss/shoveling-worker /bin/consul agent -data-dir /data
+
+    JOINIP="$(docker inspect -f '{{.NetworkSettings.IPAddress}}' node1)"
+    docker run --rm --name node2 -h node2 -v ${PWD}/data:/data svenkreiss/shoveling-worker /bin/consul agent -data-dir /data -join $JOINIP
