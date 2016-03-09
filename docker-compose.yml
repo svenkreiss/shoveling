@@ -3,6 +3,7 @@ services:
   node1:
     image: svenkreiss/shoveling-worker
     container_name: node1
+    hostname: node1
     volumes:
      - ./worker/supervisord/consul-server.conf:/etc/supervisor/conf.d/consul-server.conf
     ports:
@@ -10,6 +11,7 @@ services:
   node2:
     image: svenkreiss/shoveling-worker
     container_name: node2
+    hostname: node2
     volumes:
      - ./worker/supervisord/consul-server.conf:/etc/supervisor/conf.d/consul.conf
     ports:
