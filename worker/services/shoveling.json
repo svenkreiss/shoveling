@@ -1,0 +1,11 @@
+{
+    "service": {
+        "name": "shoveling worker",
+        "port": 5060,
+        "tags": ["shoveling", "worker"],
+        "check": {
+            "script": "curl localhost:5060/ping > /dev/null 2>&1",
+            "interval": "10s"
+        }
+    }
+}
