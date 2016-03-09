@@ -44,11 +44,18 @@ Build
 
     go build -o bin/interactive interactive/interactive.go
 
+
 Build and run a worker:
 
 .. code-block:: bash
 
     docker build -t svenkreiss/shoveling-worker worker/
+    docker-compose up
+
+
+Running outside of docker-compose (probably outdated):
+
+.. code-block:: bash
 
     docker run --rm --name node1 -h node1 -v ${PWD}/data:/data svenkreiss/shoveling-worker /bin/consul agent -data-dir /data
 
