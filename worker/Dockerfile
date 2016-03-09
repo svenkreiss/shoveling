@@ -8,10 +8,11 @@ RUN cd /tmp \
   && chmod +x consul \
   && mv consul /bin/consul \
   && rm /tmp/consul.zip
-RUN mkdir -p /opt/consul
+ADD consul /opt/consul
+RUN mkdir -p /opt/consul/data
 RUN mkdir -p /var/log/consul
 
-ADD . /opt/shoveling
+ADD worker.go /opt/shoveling/
 WORKDIR /opt/shoveling
 RUN go build -o worker worker.go
 ADD supervisord/shoveling.conf /etc/supervisor/conf.d/shoveling.conf
