@@ -1,0 +1,11 @@
+[program:shoveling]
+command = /opt/shoveling/worker
+directory = /opt/shoveling
+autorestart = true
+autostart = true
+priority = 951
+startretries = 3
+startsecs = 2
+stderr_logfile = /var/log/shoveling/worker.log
+stdout_logfile = /var/log/shoveling/worker.log
+user = root

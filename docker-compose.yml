@@ -5,10 +5,10 @@ services:
     container_name: node1
     ports:
      - "5060:5060"
-    command: bash -c "./worker && /bin/consul agent -node=node1 -data-dir /opt/consul -config-dir /opt/shoveling/services -server -bootstrap-expect 1"
+    command: /bin/consul agent -node=node1 -data-dir /opt/consul -config-dir /opt/shoveling/services -server -bootstrap-expect 1
   node2:
     image: svenkreiss/shoveling-worker
     container_name: node2
-    command: bash -c "./worker && /bin/consul agent -node=node2 -data-dir /opt/consul -config-dir /opt/shoveling/services -join node1"
+    command: /bin/consul agent -node=node2 -data-dir /opt/consul -config-dir /opt/shoveling/services -join node1
     depends_on:
      - node1

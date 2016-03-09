@@ -12,5 +12,7 @@ RUN mkdir -p /opt/consul
 ADD . /opt/shoveling
 WORKDIR /opt/shoveling
 RUN go build -o worker worker.go
+ADD supervisord-conf /etc/supervisor/conf.d/shoveling.conf
+RUN mkdir -p /var/log/shoveling
 
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp
