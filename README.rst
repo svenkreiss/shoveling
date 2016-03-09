@@ -52,6 +52,9 @@ Build and run a worker:
     docker build -t svenkreiss/shoveling-worker worker/
     docker-compose up
 
+    # get a terminal of a node:
+    docker exec -it node1 bash
+
 
 Running outside of docker-compose (probably outdated):
 
