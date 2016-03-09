@@ -1,6 +1,6 @@
 {
     "service": {
-        "name": "shoveling worker",
+        "name": "shoveling-worker",
         "port": 5060,
         "tags": ["shoveling", "worker"],
         "check": {
