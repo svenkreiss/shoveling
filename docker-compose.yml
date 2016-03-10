@@ -21,3 +21,23 @@ services:
      - "5061:5060"
     depends_on:
      - node1
+  node3:
+    image: svenkreiss/shoveling-worker
+    container_name: node3
+    hostname: node3
+    volumes:
+     - ./worker/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
+    ports:
+     - "5062:5060"
+    depends_on:
+     - node1
+  node4:
+    image: svenkreiss/shoveling-worker
+    container_name: node4
+    hostname: node4
+    volumes:
+     - ./worker/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
+    ports:
+     - "5063:5060"
+    depends_on:
+     - node1
