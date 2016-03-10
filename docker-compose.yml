@@ -16,7 +16,7 @@ services:
     container_name: node2
     hostname: node2
     volumes:
-     - ./worker/supervisord/consul-server.conf:/etc/supervisor/conf.d/consul.conf
+     - ./worker/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
     ports:
      - "5061:5060"
     depends_on:
