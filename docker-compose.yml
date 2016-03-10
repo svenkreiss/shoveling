@@ -8,6 +8,9 @@ services:
      - ./worker/supervisord/consul-server.conf:/etc/supervisor/conf.d/consul-server.conf
     ports:
      - "5060:5060"
+     - "8500:8500"
+     - "8600:8600"
+     - "8600:8600/udp"
   node2:
     image: svenkreiss/shoveling-worker
     container_name: node2

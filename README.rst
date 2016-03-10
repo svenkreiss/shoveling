@@ -55,6 +55,12 @@ Build and run a worker:
     # get a terminal of a node:
     docker exec -it node1 bash
 
+    # dns test
+    dig @192.168.99.100 -p 8600 shoveling-worker.service.consul. SRV
+
+    # consul web interface at:
+    http://192.168.99.100:8500/ui
+
 
 Running outside of docker-compose (probably outdated):
 
