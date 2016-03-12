@@ -21,7 +21,7 @@ func Workers(w http.ResponseWriter) {
     if len(os.Args) > 1 {
         dns_server = os.Args[1]
     }
-    fmt.Printf("Using dns server: ", dns_server)
+    fmt.Printf("Using dns server: %v\n", dns_server)
 
     r, _, err := c.Exchange(m, dns_server)
     if r == nil {
@@ -48,7 +48,7 @@ func Workers(w http.ResponseWriter) {
             }
             defer resp.Body.Close()
             body, _ := ioutil.ReadAll(resp.Body)
-            fmt.Fprintf(w, "%v\n", body)
+            fmt.Fprintf(w, "%v\n", string(body))
         }
     }
 }
