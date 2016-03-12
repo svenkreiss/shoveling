@@ -107,3 +107,23 @@ Running a DNS service request on the Docker host IP:
     ;; SERVER: 192.168.99.100#8600(192.168.99.100)
     ;; WHEN: Thu Mar 10 08:59:51 2016
     ;; MSG SIZE  rcvd: 413
+
+
+Worker test
+-----------
+
+.. code-block:: bash
+
+    curl 192.168.99.100:5060/workers
+
+.. code-block:: bash
+
+    5060 node1.node.dc1.consul.
+    node1.node.dc1.consul. 172.18.0.5
+    [112 111 110 103]
+    5060 node2.node.dc1.consul.
+    node2.node.dc1.consul. 172.18.0.3
+    [112 111 110 103]
+    5060 node3.node.dc1.consul.
+    node3.node.dc1.consul. 172.18.0.4
+    [112 111 110 103]

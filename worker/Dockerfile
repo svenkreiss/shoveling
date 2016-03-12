@@ -1,7 +1,8 @@
-FROM ubuntu:latest
+FROM ubuntu:16.04
 ENV TERM xterm
 
-RUN apt-get update && apt-get install -y unzip ca-certificates golang-go supervisor curl
+RUN apt-get update && \
+    apt-get install -y unzip ca-certificates golang supervisor curl git
 ADD https://releases.hashicorp.com/consul/0.6.3/consul_0.6.3_linux_amd64.zip /tmp/consul.zip
 RUN cd /tmp \
   && unzip consul.zip \
@@ -12,9 +13,16 @@ ADD consul /opt/consul
 RUN mkdir -p /opt/consul/data
 RUN mkdir -p /var/log/consul
 
-ADD worker.go /opt/shoveling/
+RUN mkdir -p /opt/go/src/github.com/svenkreiss/shoveling/worker
+RUN mkdir -p /opt/go/pkg
+RUN mkdir -p /opt/go/bin
+ENV GOPATH /opt/go
+ADD worker.go /opt/go/src/github.com/svenkreiss/shoveling/worker/
+RUN go get github.com/miekg/dns
+RUN go install github.com/svenkreiss/shoveling/worker
+
+RUN mkdir -p /opt/shoveling
 WORKDIR /opt/shoveling
-RUN go build -o worker worker.go
 ADD supervisord/shoveling.conf /etc/supervisor/conf.d/shoveling.conf
 RUN mkdir -p /var/log/shoveling
 
