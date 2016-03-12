@@ -1,9 +1,9 @@
 version: '2'
 services:
-  node1:
+  interactive:
     image: svenkreiss/shoveling-worker
-    container_name: node1
-    hostname: node1
+    container_name: interactive
+    hostname: interactive
     volumes:
      - ./worker/supervisord/consul-server.conf:/etc/supervisor/conf.d/consul-server.conf
     ports:
@@ -11,6 +11,16 @@ services:
      - "8500:8500"
      - "8600:8600"
      - "8600:8600/udp"
+  node1:
+    image: svenkreiss/shoveling-worker
+    container_name: node1
+    hostname: node1
+    volumes:
+     - ./worker/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
+    ports:
+     - "5061:5060"
+    depends_on:
+     - interactive
   node2:
     image: svenkreiss/shoveling-worker
     container_name: node2
@@ -18,9 +28,9 @@ services:
     volumes:
      - ./worker/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
     ports:
-     - "5061:5060"
+     - "5062:5060"
     depends_on:
-     - node1
+     - interactive
   node3:
     image: svenkreiss/shoveling-worker
     container_name: node3
@@ -28,16 +38,6 @@ services:
     volumes:
      - ./worker/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
     ports:
-     - "5062:5060"
-    depends_on:
-     - node1
-  node4:
-    image: svenkreiss/shoveling-worker
-    container_name: node4
-    hostname: node4
-    volumes:
-     - ./worker/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
-    ports:
      - "5063:5060"
     depends_on:
-     - node1
+     - interactive
