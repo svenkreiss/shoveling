@@ -42,18 +42,19 @@ Build
 
 .. code-block:: bash
 
-    go build -o bin/interactive interactive/interactive.go
+    go build -o bin/interactive src/interactive.go
+    go build -o bin/worker src/worker.go
 
 
 Build and run a worker:
 
 .. code-block:: bash
 
-    docker build -t svenkreiss/shoveling-worker worker/
+    docker build -t svenkreiss/shoveling .
     docker-compose up
 
     # get a terminal of a node:
-    docker exec -it node1 bash
+    docker exec -it interactive bash
 
     # consul web interface at:
     http://192.168.99.100:8500/ui
@@ -62,10 +63,10 @@ Running outside of docker-compose (probably outdated):
 
 .. code-block:: bash
 
-    docker run --rm --name node1 -h node1 -v ${PWD}/data:/data svenkreiss/shoveling-worker /bin/consul agent -data-dir /data
+    docker run --rm --name node1 -h node1 -v ${PWD}/data:/data svenkreiss/shoveling /bin/consul agent -data-dir /data
 
     JOINIP="$(docker inspect -f '{{.NetworkSettings.IPAddress}}' node1)"
-    docker run --rm --name node2 -h node2 -v ${PWD}/data:/data svenkreiss/shoveling-worker /bin/consul agent -data-dir /data -join $JOINIP
+    docker run --rm --name node2 -h node2 -v ${PWD}/data:/data svenkreiss/shoveling /bin/consul agent -data-dir /data -join $JOINIP
 
 
 DNS test

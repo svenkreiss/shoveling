@@ -9,21 +9,21 @@ RUN cd /tmp \
   && chmod +x consul \
   && mv consul /bin/consul \
   && rm /tmp/consul.zip
-ADD consul /opt/consul
+ADD image/consul /opt/consul
 RUN mkdir -p /opt/consul/data
 RUN mkdir -p /var/log/consul
 
-RUN mkdir -p /opt/go/src/github.com/svenkreiss/shoveling/worker
+RUN mkdir -p /opt/go/src/github.com/svenkreiss/shoveling
 RUN mkdir -p /opt/go/pkg
 RUN mkdir -p /opt/go/bin
 ENV GOPATH /opt/go
-ADD worker.go /opt/go/src/github.com/svenkreiss/shoveling/worker/
+ADD worker /opt/go/src/github.com/svenkreiss/shoveling/worker
 RUN go get github.com/miekg/dns
 RUN go install github.com/svenkreiss/shoveling/worker
 
 RUN mkdir -p /opt/shoveling
 WORKDIR /opt/shoveling
-ADD supervisord/shoveling.conf /etc/supervisor/conf.d/shoveling.conf
+ADD image/supervisord/shoveling.conf /etc/supervisor/conf.d/shoveling.conf
 RUN mkdir -p /var/log/shoveling
 
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp
