@@ -6,6 +6,9 @@ services:
     hostname: interactive
     volumes:
      - ./image/supervisord/consul-server.conf:/etc/supervisor/conf.d/consul-server.conf
+     - ./image/consul/services/shoveling.json:/opt/consul/services/shoveling.json
+     - ./image/supervisord/mysql.conf:/etc/supervisor/conf.d/mysql.conf
+     - ./image/consul/services/mysql.json:/opt/consul/services/mysql.json
     ports:
      - "5060:5060"
      - "8500:8500"
@@ -17,6 +20,7 @@ services:
     hostname: node1
     volumes:
      - ./image/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
+     - ./image/consul/services/shoveling.json:/opt/consul/services/shoveling.json
     ports:
      - "5061:5060"
     depends_on:
@@ -27,6 +31,7 @@ services:
     hostname: node2
     volumes:
      - ./image/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
+     - ./image/consul/services/shoveling.json:/opt/consul/services/shoveling.json
     ports:
      - "5062:5060"
     depends_on:
@@ -37,6 +42,7 @@ services:
     hostname: node3
     volumes:
      - ./image/supervisord/consul.conf:/etc/supervisor/conf.d/consul.conf
+     - ./image/consul/services/shoveling.json:/opt/consul/services/shoveling.json
     ports:
      - "5063:5060"
     depends_on:

@@ -53,11 +53,11 @@ Build and run a worker:
     docker build -t svenkreiss/shoveling .
     docker-compose up
 
-    # get a terminal of a node:
-    docker exec -it interactive bash
-
     # consul web interface at:
     http://192.168.99.100:8500/ui
+
+    # get a terminal of a node:
+    docker exec -it interactive bash
 
 Running outside of docker-compose (probably outdated):
 

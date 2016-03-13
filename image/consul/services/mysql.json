@@ -1,0 +1,11 @@
+{
+    "service": {
+        "name": "name-service",
+        "port": 3306,
+        "tags": ["shoveling", "name"],
+        "check": {
+            "script": "mysql -e \"show databases;\"",
+            "interval": "10s"
+        }
+    }
+}
