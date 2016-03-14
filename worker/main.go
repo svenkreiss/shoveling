@@ -6,15 +6,17 @@ import (
     "log"
     "fmt"
     "io/ioutil"
+    "net"
     "net/http"
     "strconv"
 )
 
 
-func Workers(w http.ResponseWriter) {
+// use Consul DNS to resolve
+func Resolve(q string) (ip net.IP, port uint16, target string, err error) {
     c := new(dns.Client)
     m := new(dns.Msg)
-    m.SetQuestion(dns.Fqdn("shoveling-worker.service.consul."), dns.TypeSRV)
+    m.SetQuestion(dns.Fqdn(q), dns.TypeSRV)
     m.RecursionDesired = true
 
     dns_server := "127.0.0.1:8600"
@@ -33,24 +35,38 @@ func Workers(w http.ResponseWriter) {
     }
 
     for _, srv := range r.Answer {
-        fmt.Fprintf(w, "%v %v\n", srv.(*dns.SRV).Port, srv.(*dns.SRV).Target)
+        port = srv.(*dns.SRV).Port
+        target = srv.(*dns.SRV).Target
+
+        fmt.Printf("%v %v\n", port, target)
 
         for _, a := range r.Extra {
-            if srv.(*dns.SRV).Target != a.(*dns.A).Hdr.Name {
+            if target != a.(*dns.A).Hdr.Name {
                 continue
             }
-            fmt.Fprintf(w, "%v %v\n", a.(*dns.A).Hdr.Name, a.(*dns.A).A)
-
-            resp, err := http.Get("http://"+a.(*dns.A).A.String()+":"+strconv.Itoa(int(srv.(*dns.SRV).Port))+"/ping")
-            if err != nil {
-                log.Printf("GET failed\n")
-                return
-            }
-            defer resp.Body.Close()
-            body, _ := ioutil.ReadAll(resp.Body)
-            fmt.Fprintf(w, "%v\n", string(body))
+            ip = a.(*dns.A).A
+            fmt.Printf("%v %v\n", target, ip)
+            return
         }
     }
+
+    log.Fatalf("no DNS record found\n")
+    return
+}
+
+
+func Workers(w http.ResponseWriter) {
+    ip, port, _, err := Resolve("shoveling-worker.service.consul.")
+
+    fmt.Fprintf(w, "http://"+ip.String()+":"+strconv.Itoa(int(port))+"/ping\n")
+    resp, err := http.Get("http://"+ip.String()+":"+strconv.Itoa(int(port))+"/ping")
+    if err != nil {
+        log.Printf("GET failed\n")
+        return
+    }
+    defer resp.Body.Close()
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Fprintf(w, "%v\n", string(body))
 }
 
 
