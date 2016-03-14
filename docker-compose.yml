@@ -7,13 +7,14 @@ services:
     volumes:
      - ./image/supervisord/consul-server.conf:/etc/supervisor/conf.d/consul-server.conf
      - ./image/consul/services/shoveling.json:/opt/consul/services/shoveling.json
-     - ./image/supervisord/mysql.conf:/etc/supervisor/conf.d/mysql.conf
+     #- ./image/supervisord/mysql.conf:/etc/supervisor/conf.d/mysql.conf
      - ./image/consul/services/mysql.json:/opt/consul/services/mysql.json
     ports:
      - "5060:5060"
      - "8500:8500"
      - "8600:8600"
      - "8600:8600/udp"
+    command: bash -c "service mysql start && supervisord -n -c /etc/supervisor/supervisord.conf"
   node1:
     image: svenkreiss/shoveling
     container_name: node1
