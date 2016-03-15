@@ -7,7 +7,7 @@ services:
     volumes:
      - ./image/supervisord/consul-server.conf:/etc/supervisor/conf.d/consul-server.conf
      - ./image/consul/services/shoveling.json:/opt/consul/services/shoveling.json
-     #- ./image/supervisord/mysql.conf:/etc/supervisor/conf.d/mysql.conf
+     - ./image/mysqld/my.cnf:/etc/mysql/my.cnf
      - ./image/consul/services/mysql.json:/opt/consul/services/mysql.json
     ports:
      - "5060:5060"

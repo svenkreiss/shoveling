@@ -9,6 +9,9 @@ import (
     "net"
     "net/http"
     "strconv"
+
+    "database/sql"
+    _ "github.com/go-sql-driver/mysql"
 )
 
 
@@ -70,8 +73,44 @@ func Workers(w http.ResponseWriter) {
 }
 
 
+type Db struct {
+    conn *sql.DB
+}
+
+func (db *Db) Get() (*sql.DB) {
+    if db.conn != nil {
+        return db.conn
+    }
+
+    ip, port, _, err := Resolve("name-service.service.consul.")
+    d, err := sql.Open("mysql",
+        "root:@tcp("+ip.String()+":"+strconv.Itoa(int(port))+")/nodes")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    db.conn = d
+    return d
+}
+
+func Nodes(w http.ResponseWriter, db *Db) {
+    err := db.Get().Ping()
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    var availabledisk int
+    err = db.Get().QueryRow("select availabledisk from nodes where id = ?", 1).Scan(&availabledisk)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println(availabledisk)
+}
+
+
 func main() {
-    fmt.Println("hello worker")
+    fmt.Println("Starting worker.")
+    var db Db
 
     http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
         fmt.Fprintf(w, "pong")
@@ -79,6 +118,10 @@ func main() {
 
     http.HandleFunc("/workers", func(w http.ResponseWriter, r *http.Request) {
         Workers(w)
+    })
+
+    http.HandleFunc("/nodes", func(w http.ResponseWriter, r *http.Request) {
+        Nodes(w, &db)
     })
 
     log.Fatal(http.ListenAndServe(":5060", nil))

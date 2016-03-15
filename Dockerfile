@@ -7,7 +7,8 @@ RUN apt-get update && \
     apt-get clean
 
 # consul
-ADD https://releases.hashicorp.com/consul/0.6.3/consul_0.6.3_linux_amd64.zip /tmp/consul.zip
+#ADD https://releases.hashicorp.com/consul/0.6.3/consul_0.6.3_linux_amd64.zip /tmp/consul.zip
+ADD consul_0.6.3_linux_amd64.zip /tmp/consul.zip
 RUN cd /tmp \
   && unzip consul.zip \
   && chmod +x consul \
@@ -22,12 +23,10 @@ RUN mkdir -p /opt/mysql
 RUN mkdir -p /var/log/mysql
 
 # shoveling
-RUN mkdir -p /opt/go/src/github.com/svenkreiss/shoveling
-RUN mkdir -p /opt/go/pkg
-RUN mkdir -p /opt/go/bin
+RUN mkdir -p /opt/go/src/github.com/svenkreiss/shoveling /opt/go/pkg /opt/go/bin
 ENV GOPATH /opt/go
 ADD worker /opt/go/src/github.com/svenkreiss/shoveling/worker
-RUN go get github.com/miekg/dns
+RUN go get github.com/miekg/dns github.com/go-sql-driver/mysql
 RUN go install github.com/svenkreiss/shoveling/worker
 
 RUN mkdir -p /opt/shoveling
